@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Pengajuan Surat</title>
+</head>
+
+<body>
+    <h2>Form Pengajuan Surat</h2>
+    <form action="/submit" method="POST">
+        <input type="text" name="nama" placeholder="Nama" required><br><br>
+        <input type="text" name="alamat" placeholder="Alamat" required><br><br>
+        <input type="text" name="prodi" placeholder="Program Studi" required><br><br>
+
+        <select name="keperluan">
+            <option value="Sidang">Sidang</option>
+            <option value="Seminar">Seminar</option>
+            <option value="Penelitian">Penelitian</option>
+        </select><br><br>
+
+        <button type="submit">Kirim</button>
+    </form>
+</body>
+
+</html>

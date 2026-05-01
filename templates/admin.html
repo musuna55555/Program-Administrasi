@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Admin</title>
+</head>
+
+<body>
+    <h2>Daftar Pengajuan</h2>
+
+    <table border="1">
+        <tr>
+            <th>Nama</th>
+            <th>Prodi</th>
+            <th>Keperluan</th>
+            <th>Aksi</th>
+        </tr>
+
+        {% for row in data %}
+        <tr>
+            <td>{{ row[1] }}</td>
+            <td>{{ row[3] }}</td>
+            <td>{{ row[4] }}</td>
+            <td>
+                <a href="/generate/{{ row[0] }}">Download Surat</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+
+</html>
