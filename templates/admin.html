@@ -1,32 +1,135 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
+  <head>
+    <title>Admin Panel</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+  </head>
 
-<head>
-    <title>Admin</title>
-</head>
+  <body class="bg-light">
+    <div class="container mt-4">
+      <div class="d-flex justify-content-between mb-3">
+        <h3>Admin Panel</h3>
+        <span>Waktu: {{ now }}</span>
+      </div>
 
-<body>
-    <h2>Daftar Pengajuan</h2>
+      <!-- SEARCH -->
+      <input
+        type="text"
+        id="search"
+        class="form-control mb-3"
+        placeholder="Cari..."
+      />
 
-    <table border="1">
-        <tr>
-            <th>Nama</th>
-            <th>Prodi</th>
-            <th>Keperluan</th>
+      <!-- TABLE -->
+      <table class="table table-bordered">
+        <thead class="table-dark">
+          <tr>
+            <th onclick="sortBy('id')">No ⬍</th>
+            <th onclick="sortBy('nama')">Nama ⬍</th>
+            <th onclick="sortBy('keperluan')">Keperluan ⬍</th>
+            <th onclick="sortBy('created_at')">Tanggal ⬍</th>
             <th>Aksi</th>
-        </tr>
+          </tr>
+        </thead>
+        <tbody id="table-body"></tbody>
+      </table>
 
-        {% for row in data %}
-        <tr>
-            <td>{{ row[1] }}</td>
-            <td>{{ row[3] }}</td>
-            <td>{{ row[4] }}</td>
-            <td>
-                <a href="/generate/{{ row[0] }}">Download Surat</a>
+      <!-- PAGINATION -->
+      <div class="d-flex justify-content-between">
+        <input type="number" id="limit" value="10" style="width: 80px" />
+        <div id="pagination"></div>
+      </div>
+    </div>
+
+    <script>
+      let currentPage = 1;
+      let currentSort = "id";
+      let currentOrder = "desc";
+
+      function sortBy(field) {
+        if (currentSort === field) {
+          currentOrder = currentOrder === "asc" ? "desc" : "asc";
+        } else {
+          currentSort = field;
+          currentOrder = "asc";
+        }
+        currentPage = 1;
+        loadData();
+      }
+
+      function loadData() {
+        const search = document.getElementById("search").value;
+        const limit = parseInt(document.getElementById("limit").value) || 10;
+
+        const url = `${window.location.origin}/api/data?search=${search}&page=${currentPage}&limit=${limit}&sort=${currentSort}&order=${currentOrder}`;
+
+        fetch(url)
+          .then((res) => res.json())
+          .then((res) => {
+            const tbody = document.getElementById("table-body");
+            tbody.innerHTML = "";
+
+            (res.data || []).forEach((row, i) => {
+              tbody.innerHTML += `
+          <tr>
+            <td>${(res.page - 1) * res.limit + i + 1}</td>
+            <td>${row.nama || ""}</td>
+            <td>${row.keperluan || ""}</td>
+            <td>${
+              row.created_at
+                ? new Date(row.created_at).toLocaleString("id-ID", {
+                    day: "2-digit",
+                    month: "long",
+                    year: "numeric",
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  }) + " WIB"
+                : ""
+            }
             </td>
-        </tr>
-        {% endfor %}
-    </table>
-</body>
+            <td>
+              <a href="/generate/${row.id}" class="btn btn-sm btn-success">Download</a>
+              <a href="/delete/${row.id}" class="btn btn-sm btn-danger">Delete</a>
+            </td>
+          </tr>
+        `;
+            });
 
+            const totalPages = Math.ceil(res.total / res.limit);
+            const pag = document.getElementById("pagination");
+            pag.innerHTML = "";
+
+            for (let i = 1; i <= totalPages; i++) {
+              pag.innerHTML += `
+          <button class="btn btn-sm ${i === res.page ? "btn-primary" : "btn-outline-primary"}"
+                  onclick="goPage(${i})">${i}</button>
+        `;
+            }
+          });
+      }
+
+      function goPage(p) {
+        currentPage = p;
+        loadData();
+      }
+
+      // realtime search
+      document.getElementById("search").addEventListener("input", () => {
+        currentPage = 1;
+        loadData();
+      });
+
+      // limit change
+      document.getElementById("limit").addEventListener("change", () => {
+        currentPage = 1;
+        loadData();
+      });
+
+      // load awal
+      loadData();
+    </script>
+  </body>
 </html>

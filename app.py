@@ -1,17 +1,35 @@
-from flask import Flask, render_template, request, send_file
+from flask import Flask, render_template, request, send_file, session, redirect
 import sqlite3
 import os
 from docxtpl import DocxTemplate
 from io import BytesIO
+from datetime import datetime
+
 
 app = Flask(__name__)
+app.secret_key = os.environ.get("SECRET_KEY", "fallback_key")
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        username = request.form.get('username')
+        password = request.form.get('password')
+
+        if username == "admin" and password == "alhamdulillah":
+            session['login'] = True
+            return redirect('/admin')
+        else:
+            return "Login gagal"
+
+    return render_template('login.html')
 
 # mapping template (lebih aman pakai os.path.join)
 TEMPLATES = {
-    "Aktif Kuliah": os.path.join("templates_surat", "aktif_kuliah.docx"),
-    "Lab Penelitian": os.path.join("templates_surat", "lab_penelitian.docx"),
-    "Ethical Clearance": os.path.join("templates_surat", "ethical.docx"),
-    "Identifikasi Tumbuhan": os.path.join("templates_surat", "tumbuhan.docx")
+    "Surat Aktif Kuliah": os.path.join("templates_surat", "aktif_kuliah.docx"),
+    "Permohonan Penggunaan Ruangan dan Fasilitas Laboratorium Penelitian": os.path.join("templates_surat", "lab_penelitian.docx"),
+    "Permohonan Surat Ethical Clearance Manusia": os.path.join("templates_surat", "ethical(manusia).docx"),
+    "Permohonan Surat Ethical Clearance Hewan": os.path.join("templates_surat", "ethical(hewan).docx"),
+    "Surat Identifikasi Tumbuhan": os.path.join("templates_surat", "tumbuhan.docx")
 }
 
 DB = "database.db"
@@ -40,7 +58,9 @@ def init_db():
             doping TEXT,
             namatumbuhan TEXT,
             asaltumbuhan TEXT,
-            keperluan TEXT
+            keperluan TEXT,
+            rencanapenel TEXT,
+            created_at TEXT DEFAULT CURRENT_TIMESTAMP
         )
     ''')
     conn.commit()
@@ -62,9 +82,13 @@ def form_aktif_kuliah():
 def form_lab_penelitian():
     return render_template('form_lab_penelitian.html')
 
-@app.route('/form/ethical-clearance')
-def form_ethical_clearance():
-    return render_template('form_ethical_clearance.html')
+@app.route('/form/ethical-clearance-manusia')
+def form_ethical_clearance_manusia():
+    return render_template('form_ethical_clearance(manusia).html')
+
+@app.route('/form/ethical-clearance-hewan')
+def form_ethical_clearance_hewan():
+    return render_template('form_ethical_clearance(hewan).html')
 
 @app.route('/form/identifikasi-tumbuhan')
 def form_identifikasi_tumbuhan():
@@ -93,12 +117,13 @@ def submit():
         request.form.get('doping'),
         request.form.get('namatumbuhan'),
         request.form.get('asaltumbuhan'),
-        request.form.get('keperluan')
+        request.form.get('keperluan'),
+        request.form.get('rencanapenel')
     )
 
     # validasi sederhana
-    if not data[-1]:
-        return "Keperluan tidak valid"
+    # if not data[-1]:
+    #     return "Keperluan tidak valid"
 
     conn = sqlite3.connect(DB)
     c = conn.cursor()
@@ -107,9 +132,9 @@ def submit():
     INSERT INTO pengajuan (
         nama, ttl, jk, npm, nim, sem, jurusan, prodi, fakultas, jp,
         alamatmaha, namaortu, pekerortu, alamatortu,
-        judul, doping, namatumbuhan, asaltumbuhan, keperluan
+        judul, doping, namatumbuhan, asaltumbuhan, keperluan, rencanapenel
     )
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     """, data)
 
     conn.commit()
@@ -121,16 +146,110 @@ def submit():
 # ================= ADMIN =================
 @app.route('/admin')
 def admin():
+    if not session.get('login'):
+        return redirect('/login')
+
+    search = request.args.get('search', '')
+    limit = int(request.args.get('limit', 10))
+
     conn = sqlite3.connect(DB)
     conn.row_factory = sqlite3.Row
     c = conn.cursor()
 
-    c.execute("SELECT * FROM pengajuan ORDER BY id DESC")
+    if search:
+        query = """
+        SELECT * FROM pengajuan
+        WHERE nama LIKE ? OR keperluan LIKE ?
+        ORDER BY id DESC
+        LIMIT ?
+        """
+        c.execute(query, (f"%{search}%", f"%{search}%", limit))
+    else:
+        c.execute("SELECT * FROM pengajuan ORDER BY id DESC LIMIT ?", (limit,))
+
     data = c.fetchall()
-
     conn.close()
-    return render_template('admin.html', data=data)
 
+    now = datetime.now().strftime("%d-%m-%Y %H:%M:%S")
+
+    return render_template('admin.html', data=data, now=now)
+
+@app.route('/delete/<int:id>')
+def delete(id):
+    if not session.get('login'):
+        return redirect('/login')
+
+    conn = sqlite3.connect(DB)
+    c = conn.cursor()
+    c.execute("DELETE FROM pengajuan WHERE id=?", (id,))
+    conn.commit()
+    conn.close()
+
+    return redirect('/admin')
+
+@app.route('/logout')
+def logout():
+    session.clear()
+    return redirect('/login')
+
+@app.route('/api/data')
+def api_data():
+    if not session.get('login'):
+        return {"error": "unauthorized"}, 403
+
+    search = request.args.get('search', '')
+    page = int(request.args.get('page', 1))
+    limit = int(request.args.get('limit', 10))
+    
+    sort = request.args.get('sort', 'id')
+    order = request.args.get('order', 'desc')
+
+    # biar aman (WAJIB) 
+    allowed_sort = ["id", "nama", "keperluan", "created_at"]
+    if sort not in allowed_sort:
+        sort = "id"
+
+    query_order = "ASC" if order == "asc" else "DESC"
+
+    offset = (page - 1) * limit
+
+    conn = sqlite3.connect(DB)
+    conn.row_factory = sqlite3.Row
+    c = conn.cursor()
+
+    if search:
+        c.execute("""
+        SELECT COUNT(*) FROM pengajuan
+        WHERE nama LIKE ? OR keperluan LIKE ?
+        """, (f"%{search}%", f"%{search}%"))
+    else:
+        c.execute("SELECT COUNT(*) FROM pengajuan")
+
+    total = c.fetchone()[0]
+
+    if search:
+        c.execute(f"""
+    SELECT * FROM pengajuan
+    WHERE nama LIKE ? OR keperluan LIKE ?
+    ORDER BY {sort} {query_order}
+    LIMIT ? OFFSET ?
+    """, (f"%{search}%", f"%{search}%", limit, offset))
+    else:
+        c.execute(f"""
+    SELECT * FROM pengajuan
+    ORDER BY {sort} {query_order}
+    LIMIT ? OFFSET ?
+    """, (limit, offset))
+
+    data = [dict(row) for row in c.fetchall()]
+    conn.close()
+
+    return {
+        "data": data,
+        "total": total,
+        "page": page,
+        "limit": limit
+    }
 
 # ================= GENERATE =================
 @app.route('/generate/<int:id>')
