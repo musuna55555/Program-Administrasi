@@ -31,7 +31,8 @@ TEMPLATES = {
     "Permohonan Surat Ethical Clearance Hewan": os.path.join("templates_surat", "ethical(hewan).docx"),
     "Surat Identifikasi Tumbuhan": os.path.join("templates_surat", "tumbuhan.docx"),
     "Surat Penyerahan Skripsi": os.path.join("templates_surat", "penyerahan_skripsi.docx"),
-    "seminar hasil": os.path.join("templates_surat", "seminar_hasil.docx")
+    "seminar hasil": os.path.join("templates_surat", "seminar_hasil.docx"),
+    "Surat Penyerahan Skripsi Luks": os.path.join("templates_surat", "penyerahan_skripsi_luks.docx")
 }
 
 DB = "database.db"
@@ -110,6 +111,10 @@ def form_identifikasi_tumbuhan():
 @app.route('/form/penyerahan-skripsi')
 def form_penyerahan_skripsi():
     return render_template('form_penyerahan_skripsi.html')
+
+@app.route('/form/penyerahan-skripsi-luks')
+def form_penyerahan_skripsi_luks():
+    return render_template('form_penyerahan_skripsi_luks.html')
 
 # ================= SUBMIT =================
 @app.route('/submit', methods=['POST'])
