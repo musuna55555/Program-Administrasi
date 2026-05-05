@@ -30,7 +30,8 @@ TEMPLATES = {
     "Permohonan Surat Ethical Clearance Manusia": os.path.join("templates_surat", "ethical(manusia).docx"),
     "Permohonan Surat Ethical Clearance Hewan": os.path.join("templates_surat", "ethical(hewan).docx"),
     "Surat Identifikasi Tumbuhan": os.path.join("templates_surat", "tumbuhan.docx"),
-    "Surat Penyerahan Skripsi": os.path.join("templates_surat", "penyerahan_skripsi.docx")
+    "Surat Penyerahan Skripsi": os.path.join("templates_surat", "penyerahan_skripsi.docx"),
+    "seminar hasil": os.path.join("templates_surat", "seminar_hasil.docx")
 }
 
 DB = "database.db"
@@ -62,6 +63,12 @@ def init_db():
             keperluan TEXT,
             rencanapenel TEXT,
             tglsidang TEXT,
+            hari TEXT,
+            tgl TEXT,
+            jam TEXT,
+            doji1 TEXT,
+            doji2 TEXT,
+            doji3 TEXT,
             created_at TEXT DEFAULT CURRENT_TIMESTAMP
         )
     ''')
@@ -79,6 +86,10 @@ def index():
 @app.route('/form/aktif-kuliah')
 def form_aktif_kuliah():
     return render_template('form_aktif_kuliah.html')
+
+@app.route('/form/seminar-hasil')
+def form_seminar_hasil():
+    return render_template('form_seminar_hasil.html')
 
 @app.route('/form/lab-penelitian')
 def form_lab_penelitian():
@@ -124,7 +135,13 @@ def submit():
         request.form.get('asaltumbuhan'),
         request.form.get('keperluan'),
         request.form.get('rencanapenel'),
-        request.form.get('tglsidang')
+        request.form.get('tglsidang'),
+        request.form.get('hari'),
+        request.form.get('tgl'),
+        request.form.get('jam'),
+        request.form.get('doji1'),
+        request.form.get('doji2'),
+        request.form.get('doji3')
     )
 
     # validasi sederhana
@@ -138,9 +155,9 @@ def submit():
     INSERT INTO pengajuan (
         nama, ttl, jk, npm, nim, sem, jurusan, prodi, fakultas, jp,
         alamatmaha, namaortu, pekerortu, alamatortu,
-        judul, doping, namatumbuhan, asaltumbuhan, keperluan, rencanapenel, tglsidang
+        judul, doping, namatumbuhan, asaltumbuhan, keperluan, rencanapenel, tglsidang, hari, tgl, jam, doji1, doji2, doji3
     )
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     """, data)
 
     conn.commit()
