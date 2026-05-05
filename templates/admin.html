@@ -81,6 +81,7 @@
             <td>${
               row.created_at
                 ? new Date(row.created_at).toLocaleString("id-ID", {
+                    timeZone: "Asia/Jakarta",
                     day: "2-digit",
                     month: "long",
                     year: "numeric",

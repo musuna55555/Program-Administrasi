@@ -29,7 +29,8 @@ TEMPLATES = {
     "Permohonan Penggunaan Ruangan dan Fasilitas Laboratorium Penelitian": os.path.join("templates_surat", "lab_penelitian.docx"),
     "Permohonan Surat Ethical Clearance Manusia": os.path.join("templates_surat", "ethical(manusia).docx"),
     "Permohonan Surat Ethical Clearance Hewan": os.path.join("templates_surat", "ethical(hewan).docx"),
-    "Surat Identifikasi Tumbuhan": os.path.join("templates_surat", "tumbuhan.docx")
+    "Surat Identifikasi Tumbuhan": os.path.join("templates_surat", "tumbuhan.docx"),
+    "Surat Penyerahan Skripsi": os.path.join("templates_surat", "penyerahan_skripsi.docx")
 }
 
 DB = "database.db"
@@ -60,6 +61,7 @@ def init_db():
             asaltumbuhan TEXT,
             keperluan TEXT,
             rencanapenel TEXT,
+            tglsidang TEXT,
             created_at TEXT DEFAULT CURRENT_TIMESTAMP
         )
     ''')
@@ -94,6 +96,9 @@ def form_ethical_clearance_hewan():
 def form_identifikasi_tumbuhan():
     return render_template('form_identifikasi_tumbuhan.html')
 
+@app.route('/form/penyerahan-skripsi')
+def form_penyerahan_skripsi():
+    return render_template('form_penyerahan_skripsi.html')
 
 # ================= SUBMIT =================
 @app.route('/submit', methods=['POST'])
@@ -118,7 +123,8 @@ def submit():
         request.form.get('namatumbuhan'),
         request.form.get('asaltumbuhan'),
         request.form.get('keperluan'),
-        request.form.get('rencanapenel')
+        request.form.get('rencanapenel'),
+        request.form.get('tglsidang')
     )
 
     # validasi sederhana
@@ -132,9 +138,9 @@ def submit():
     INSERT INTO pengajuan (
         nama, ttl, jk, npm, nim, sem, jurusan, prodi, fakultas, jp,
         alamatmaha, namaortu, pekerortu, alamatortu,
-        judul, doping, namatumbuhan, asaltumbuhan, keperluan, rencanapenel
+        judul, doping, namatumbuhan, asaltumbuhan, keperluan, rencanapenel, tglsidang
     )
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     """, data)
 
     conn.commit()
