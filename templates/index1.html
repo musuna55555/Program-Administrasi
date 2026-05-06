@@ -1,0 +1,117 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Pelayanan Surat Mahasiswa</title>
+
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+
+    <style>
+      body {
+        height: 100vh;
+        margin: 0;
+        overflow: hidden;
+        font-family: "Segoe UI", sans-serif;
+        color: white;
+      }
+
+      /* Animated Gradient Background */
+      body::before {
+        content: "";
+        position: fixed;
+        width: 200%;
+        height: 200%;
+        background: linear-gradient(45deg, #4facfe, #00f2fe, #43e97b, #38f9d7);
+        animation: animateBG 10s linear infinite;
+        z-index: -1;
+      }
+
+      @keyframes animateBG {
+        0% {
+          transform: translate(0, 0);
+        }
+        50% {
+          transform: translate(-25%, -25%);
+        }
+        100% {
+          transform: translate(0, 0);
+        }
+      }
+
+      .card {
+        background: rgba(0, 0, 0, 0.6);
+        border: none;
+        border-radius: 20px;
+      }
+
+      .btn-custom {
+        width: 100%;
+        margin-bottom: 10px;
+        border-radius: 10px;
+        font-weight: bold;
+        transition: 0.3s;
+      }
+
+      .btn-custom:hover {
+        transform: scale(1.05);
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="d-flex justify-content-center align-items-center h-100">
+      <div class="card p-4 shadow text-center" style="width: 500px">
+        <h3 class="mb-4" style="color: white">PELAYANAN SURAT MAHASISWA</h3>
+        <a href="/form/aktif-kuliah">
+          <button class="btn btn-primary btn-custom">Surat Aktif Kuliah</button>
+        </a>
+
+        <a href="/form/lab-penelitian">
+          <button class="btn btn-info btn-custom">Surat Lab Penelitian</button>
+        </a>
+
+        <a href="/form/ethical-clearance-manusia">
+          <button class="btn btn-success btn-custom">
+            Surat Ethical Clearance (Manusia)
+          </button>
+        </a>
+
+        <a href="/form/ethical-clearance-hewan">
+          <button class="btn btn-success btn-custom">
+            Surat Ethical Clearance (Hewan)
+          </button>
+        </a>
+
+        <a href="/form/identifikasi-tumbuhan">
+          <button class="btn btn-warning btn-custom">
+            Surat Determinasi (Tumbuhan)
+          </button>
+        </a>
+
+        <a href="/form/penyerahan-skripsi">
+          <button class="btn btn-secondary btn-custom">
+            Surat Penyerahan Skripsi
+          </button>
+        </a>
+
+        <a href="/form/penyerahan-skripsi-luks">
+          <button class="btn btn-secondary btn-custom">
+            Lembar Penyerahan Skripsi Edisi Lux
+          </button>
+        </a>
+
+        <a href="/form/seminar-hasil">
+          <button class="btn btn-info btn-custom">Seminar Hasil</button>
+        </a>
+
+        <a href="/form/penetapan-penguji">
+          <button class="btn btn-info btn-custom">
+            Penetapan penguji seminar Formulir Undangan semhas penelitian
+          </button>
+        </a>
+      </div>
+    </div>
+  </body>
+</html>

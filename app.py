@@ -32,7 +32,8 @@ TEMPLATES = {
     "Surat Identifikasi Tumbuhan": os.path.join("templates_surat", "tumbuhan.docx"),
     "Surat Penyerahan Skripsi": os.path.join("templates_surat", "penyerahan_skripsi.docx"),
     "seminar hasil": os.path.join("templates_surat", "seminar_hasil.docx"),
-    "Surat Penyerahan Skripsi Luks": os.path.join("templates_surat", "penyerahan_skripsi_luks.docx")
+    "Surat Penyerahan Skripsi Luks": os.path.join("templates_surat", "penyerahan_skripsi_luks.docx"),
+    "penetapan penguji seminar": os.path.join("templates_surat", "penetapan_penguji_formulir_seminar.docx")
 }
 
 DB = "database.db"
@@ -70,6 +71,9 @@ def init_db():
             doji1 TEXT,
             doji2 TEXT,
             doji3 TEXT,
+            wa TEXT,
+            tempat TEXT,
+            sifat TEXT,
             created_at TEXT DEFAULT CURRENT_TIMESTAMP
         )
     ''')
@@ -116,6 +120,10 @@ def form_penyerahan_skripsi():
 def form_penyerahan_skripsi_luks():
     return render_template('form_penyerahan_skripsi_luks.html')
 
+@app.route('/form/penetapan-penguji')
+def form_penetapan_penguji():
+    return render_template('form_penetapan_penguji.html')
+
 # ================= SUBMIT =================
 @app.route('/submit', methods=['POST'])
 def submit():
@@ -146,7 +154,10 @@ def submit():
         request.form.get('jam'),
         request.form.get('doji1'),
         request.form.get('doji2'),
-        request.form.get('doji3')
+        request.form.get('doji3'),
+        request.form.get('wa'),
+        request.form.get('tempat'),
+        request.form.get('sifat')
     )
 
     # validasi sederhana
@@ -160,9 +171,9 @@ def submit():
     INSERT INTO pengajuan (
         nama, ttl, jk, npm, nim, sem, jurusan, prodi, fakultas, jp,
         alamatmaha, namaortu, pekerortu, alamatortu,
-        judul, doping, namatumbuhan, asaltumbuhan, keperluan, rencanapenel, tglsidang, hari, tgl, jam, doji1, doji2, doji3
+        judul, doping, namatumbuhan, asaltumbuhan, keperluan, rencanapenel, tglsidang, hari, tgl, jam, doji1, doji2, doji3, wa, tempat, sifat
     )
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     """, data)
 
     conn.commit()

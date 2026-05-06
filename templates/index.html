@@ -10,104 +10,129 @@
 
     <style>
       body {
-        height: 100vh;
         margin: 0;
+        height: 100vh;
+        font-family: "Poppins", sans-serif;
         overflow: hidden;
-        font-family: "Segoe UI", sans-serif;
         color: white;
       }
 
-      /* Animated Gradient Background */
+      /* 🔥 ANIMATED GRADIENT BACKGROUND */
       body::before {
         content: "";
         position: fixed;
-        width: 200%;
-        height: 200%;
-        background: linear-gradient(45deg, #4facfe, #00f2fe, #43e97b, #38f9d7);
-        animation: animateBG 10s linear infinite;
+        width: 300%;
+        height: 300%;
+        background: linear-gradient(45deg, #ff6ec4, #7873f5, #42e695, #ff9a9e);
+        animation: gradientMove 12s ease infinite;
         z-index: -1;
       }
 
-      @keyframes animateBG {
+      @keyframes gradientMove {
         0% {
           transform: translate(0, 0);
         }
         50% {
-          transform: translate(-25%, -25%);
+          transform: translate(-30%, -30%);
         }
         100% {
           transform: translate(0, 0);
         }
       }
 
-      .card {
-        background: rgba(0, 0, 0, 0.6);
-        border: none;
-        border-radius: 20px;
+      /* GLASS CARD */
+      .glass-card {
+        backdrop-filter: blur(15px);
+        background: rgba(255, 255, 255, 0.08);
+        border-radius: 25px;
+        padding: 30px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
       }
 
-      .btn-custom {
-        width: 100%;
-        margin-bottom: 10px;
-        border-radius: 10px;
+      .title {
         font-weight: bold;
-        transition: 0.3s;
+        margin-bottom: 25px;
+        letter-spacing: 1px;
       }
 
-      .btn-custom:hover {
-        transform: scale(1.05);
+      /* GRID 2 KOLOM */
+      .menu-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+      }
+
+      .menu-card {
+        background: rgba(255, 255, 255, 0.12);
+        border-radius: 15px;
+        padding: 18px;
+        text-align: center;
+        font-weight: 500;
+        transition: 0.3s;
+        cursor: pointer;
+      }
+
+      .menu-card:hover {
+        transform: translateY(-5px) scale(1.05);
+        background: rgba(255, 255, 255, 0.25);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+      }
+
+      a {
+        text-decoration: none;
+        color: white;
+      }
+
+      .footer {
+        margin-top: 20px;
+        font-size: 12px;
+        opacity: 0.7;
       }
     </style>
   </head>
 
   <body>
     <div class="d-flex justify-content-center align-items-center h-100">
-      <div class="card p-4 shadow text-center" style="width: 500px">
-        <h3 class="mb-4" style="color: white;">PELAYANAN SURAT MAHASISWA</h3>
+      <div class="glass-card text-center" style="width: 600px">
+        <h3 class="title">📄 Pelayanan Surat Mahasiswa</h3>
 
-        <a href="/form/aktif-kuliah">
-          <button class="btn btn-primary btn-custom">Surat Aktif Kuliah</button>
-        </a>
+        <div class="menu-grid">
+          <a href="/form/aktif-kuliah"
+            ><div class="menu-card">Surat Aktif Kuliah</div></a
+          >
+          <a href="/form/lab-penelitian"
+            ><div class="menu-card">Surat Lab Penelitian</div></a
+          >
 
-        <a href="/form/lab-penelitian">
-          <button class="btn btn-info btn-custom">Lab Penelitian</button>
-        </a>
+          <a href="/form/ethical-clearance-manusia"
+            ><div class="menu-card">Surat Ethical Clearance (Manusia)</div></a
+          >
+          <a href="/form/ethical-clearance-hewan"
+            ><div class="menu-card">Surat Ethical Clearance (Hewan)</div></a
+          >
 
-        <a href="/form/ethical-clearance-manusia">
-          <button class="btn btn-success btn-custom">
-            Ethical Clearance Manusia
-          </button>
-        </a>
+          <a href="/form/identifikasi-tumbuhan"
+            ><div class="menu-card">Surat Determinasi Tumbuhan</div></a
+          >
+          <a href="/form/penyerahan-skripsi"
+            ><div class="menu-card">Surat Penyerahan Skripsi</div></a
+          >
 
-        <a href="/form/ethical-clearance-hewan">
-          <button class="btn btn-success btn-custom">
-            Ethical Clearance Hewan
-          </button>
-        </a>
+          <a href="/form/penyerahan-skripsi-luks"
+            ><div class="menu-card">Lembar Penyerahan Skripsi Edisi Lux</div></a
+          >
+          <a href="/form/seminar-hasil"
+            ><div class="menu-card">Seminar Hasil</div></a
+          >
 
-        <a href="/form/identifikasi-tumbuhan">
-          <button class="btn btn-warning btn-custom">
-            Identifikasi Tumbuhan
-          </button>
-        </a>
+          <a href="/form/penetapan-penguji"
+            ><div class="menu-card">
+              Penetapan penguji seminar Formulir Undangan semhas penelitian
+            </div></a
+          >
+        </div>
 
-        <a href="/form/penyerahan-skripsi">
-          <button class="btn btn-secondary btn-custom">
-            Surat Penyerahan Skripsi
-          </button>
-        </a>
-
-        <a href="/form/penyerahan-skripsi-luks">
-          <button class="btn btn-secondary btn-custom">
-            Surat Penyerahan Skripsi Luks
-          </button>
-        </a>
-
-        <a href="/form/seminar-hasil">
-          <button class="btn btn-info btn-custom">
-            Seminar Hasil
-          </button>
-        </a>
+        <div class="footer">Sistem Administrasi Mahasiswa</div>
       </div>
     </div>
   </body>

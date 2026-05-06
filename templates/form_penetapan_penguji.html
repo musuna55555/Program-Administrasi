@@ -1,7 +1,7 @@
 <!doctype html>
 <html>
   <head>
-    <title>Penyerahan Skripsi Lux</title>
+    <title>Penetapan penguji seminar Formulir Undangan semhas penelitian</title>
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
       rel="stylesheet"
@@ -10,13 +10,15 @@
   <body class="bg-light">
     <div class="container mt-5">
       <div class="card shadow p-4">
-        <h3 class="mb-4 text-center">Form Penyerahan Skripsi</h3>
+        <h3 class="mb-4 text-center">
+          Form Penetapan penguji seminar Formulir Undangan semhas penelitian
+        </h3>
 
         <form action="/submit" method="POST">
           <input
             type="hidden"
             name="keperluan"
-            value="Surat Penyerahan Skripsi Luks"
+            value="penetapan penguji seminar"
           />
 
           <div class="row">
@@ -27,17 +29,29 @@
               <label>NPM</label>
               <input class="form-control mb-3" name="npm" />
 
-              <label>Fakultas</label>
-              <input class="form-control mb-3" name="fakultas" />
+              <label>No HP/Wa</label>
+              <input class="form-control mb-3" name="wa" />
 
-              <label>Program Studi</label>
-              <input class="form-control mb-3" name="prodi" />
+              <label>Hari</label>
+              <input class="form-control mb-3" name="hari" />
 
-              <label>Judul Skripsi</label>
-              <textarea class="form-control mb-3" name="judul"></textarea>
+              <label>Tanggal</label>
+              <input class="form-control mb-3" name="tgl" />
+
+              <label>Jam</label>
+              <input class="form-control mb-3" name="jam" />
+
+              <label>Tempat</label>
+              <input class="form-control mb-3" name="tempat" />
             </div>
 
             <div class="col-md-6">
+              <label>Judul</label>
+              <textarea class="form-control mb-3" name="judul"></textarea>
+
+              <label>Sifat</label>
+              <input class="form-control mb-3" name="sifat" />
+
               <label>Dosen Pembimbing</label>
               <input class="form-control mb-3" name="doping" />
 
@@ -46,14 +60,11 @@
 
               <label>Dosen Penguji 2</label>
               <input class="form-control mb-3" name="doji2" />
-
-              <label>Tanggal Sidang</label>
-              <input class="form-control mb-3" name="tglsidang" />
             </div>
           </div>
 
           <div class="text-center mt-3">
-            <button class="btn btn-danger px-5">Kirim</button>
+            <button class="btn btn-success px-5">Kirim</button>
           </div>
         </form>
       </div>
