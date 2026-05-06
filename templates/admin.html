@@ -12,7 +12,7 @@
     <div class="container mt-4">
       <div class="d-flex justify-content-between mb-3">
         <h3>Admin Panel</h3>
-        <span>Waktu: {{ now }}</span>
+        <span id="clock">Waktu: -</span>
       </div>
 
       <!-- SEARCH -->
@@ -131,6 +131,29 @@
 
       // load awal
       loadData();
+
+      function updateClock() {
+        const now = new Date();
+
+        const formatted = now.toLocaleString("id-ID", {
+          timeZone: "Asia/Jakarta",
+          day: "2-digit",
+          month: "long",
+          year: "numeric",
+          hour: "2-digit",
+          minute: "2-digit",
+          second: "2-digit",
+        });
+
+        document.getElementById("clock").innerText =
+          "Waktu: " + formatted + " WIB";
+      }
+
+      // jalan pertama kali
+      updateClock();
+
+      // update tiap 1 detik
+      setInterval(updateClock, 1000);
     </script>
   </body>
 </html>

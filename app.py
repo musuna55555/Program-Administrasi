@@ -4,7 +4,7 @@ import os
 from docxtpl import DocxTemplate
 from io import BytesIO
 from datetime import datetime
-
+import pytz
 
 app = Flask(__name__)
 app.secret_key = os.environ.get("SECRET_KEY", "fallback_key")
@@ -31,9 +31,9 @@ TEMPLATES = {
     "Permohonan Surat Ethical Clearance Hewan": os.path.join("templates_surat", "ethical(hewan).docx"),
     "Surat Identifikasi Tumbuhan": os.path.join("templates_surat", "tumbuhan.docx"),
     "Surat Penyerahan Skripsi": os.path.join("templates_surat", "penyerahan_skripsi.docx"),
-    "seminar hasil": os.path.join("templates_surat", "seminar_hasil.docx"),
-    "Surat Penyerahan Skripsi Luks": os.path.join("templates_surat", "penyerahan_skripsi_luks.docx"),
-    "penetapan penguji seminar": os.path.join("templates_surat", "penetapan_penguji_formulir_seminar.docx")
+    "Seminar hasil": os.path.join("templates_surat", "seminar_hasil.docx"),
+    "Surat Penyerahan Skripsi Lux": os.path.join("templates_surat", "penyerahan_skripsi_luks.docx"),
+    "Penetapan penguji seminar, Formulir, Undangan semhas penelitian": os.path.join("templates_surat", "penetapan_penguji_formulir_seminar.docx")
 }
 
 DB = "database.db"
@@ -127,6 +127,9 @@ def form_penetapan_penguji():
 # ================= SUBMIT =================
 @app.route('/submit', methods=['POST'])
 def submit():
+    wib = pytz.timezone('Asia/Jakarta')
+    now = datetime.now(wib).strftime("%Y-%m-%d %H:%M:%S")  # ← FIX WIB
+
     data = (
         request.form.get('nama'),
         request.form.get('ttl'),
@@ -136,7 +139,7 @@ def submit():
         request.form.get('sem'),
         request.form.get('jurusan'),
         request.form.get('prodi'),
-        request.form.get('fakultas'),   # ← sudah benar urutan
+        request.form.get('fakultas'),
         request.form.get('jp'),
         request.form.get('alamatmaha'),
         request.form.get('namaortu'),
@@ -157,12 +160,9 @@ def submit():
         request.form.get('doji3'),
         request.form.get('wa'),
         request.form.get('tempat'),
-        request.form.get('sifat')
+        request.form.get('sifat'),
+        now   # ← TAMBAH INI
     )
-
-    # validasi sederhana
-    # if not data[-1]:
-    #     return "Keperluan tidak valid"
 
     conn = sqlite3.connect(DB)
     c = conn.cursor()
@@ -171,9 +171,12 @@ def submit():
     INSERT INTO pengajuan (
         nama, ttl, jk, npm, nim, sem, jurusan, prodi, fakultas, jp,
         alamatmaha, namaortu, pekerortu, alamatortu,
-        judul, doping, namatumbuhan, asaltumbuhan, keperluan, rencanapenel, tglsidang, hari, tgl, jam, doji1, doji2, doji3, wa, tempat, sifat
+        judul, doping, namatumbuhan, asaltumbuhan, keperluan,
+        rencanapenel, tglsidang, hari, tgl, jam,
+        doji1, doji2, doji3, wa, tempat, sifat,
+        created_at   -- ← TAMBAH INI
     )
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     """, data)
 
     conn.commit()

@@ -15,9 +15,25 @@
         font-family: "Poppins", sans-serif;
         overflow: hidden;
         color: white;
+        transition: 0.3s;
       }
 
-      /* 🔥 ANIMATED GRADIENT BACKGROUND */
+      /* DARK MODE */
+      body.light {
+        background: #f5f5f5;
+        color: black;
+      }
+
+      body.light .glass-card {
+        background: rgba(255, 255, 255, 0.9);
+        color: black;
+      }
+
+      body.light .menu-card {
+        color: black;
+      }
+
+      /* BACKGROUND */
       body::before {
         content: "";
         position: fixed;
@@ -40,7 +56,6 @@
         }
       }
 
-      /* GLASS CARD */
       .glass-card {
         backdrop-filter: blur(15px);
         background: rgba(255, 255, 255, 0.08);
@@ -49,13 +64,6 @@
         box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
       }
 
-      .title {
-        font-weight: bold;
-        margin-bottom: 25px;
-        letter-spacing: 1px;
-      }
-
-      /* GRID 2 KOLOM */
       .menu-grid {
         display: grid;
         grid-template-columns: 1fr 1fr;
@@ -63,77 +71,203 @@
       }
 
       .menu-card {
-        background: rgba(255, 255, 255, 0.12);
+        position: relative;
+        overflow: hidden;
         border-radius: 15px;
         padding: 18px;
         text-align: center;
         font-weight: 500;
-        transition: 0.3s;
         cursor: pointer;
+        transition: 0.3s;
       }
 
       .menu-card:hover {
         transform: translateY(-5px) scale(1.05);
-        background: rgba(255, 255, 255, 0.25);
-        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+        filter: brightness(1.2);
+      }
+
+      /* WARNA */
+      .btn1 {
+        background: linear-gradient(135deg, #667eea, #764ba2);
+      }
+      .btn2 {
+        background: linear-gradient(135deg, #f7971e, #ffd200);
+      }
+      .btn3 {
+        background: linear-gradient(135deg, #ff4882, #38f9d7);
+      }
+      .btn4 {
+        background: linear-gradient(135deg, #ff005d, #ee8709);
+      }
+      .btn5 {
+        background: linear-gradient(135deg, #00c6ff, #0072ff);
+      }
+      .btn6 {
+        background: linear-gradient(135deg, #ff758c, #ff7eb3);
+      }
+      .btn7 {
+        background: linear-gradient(135deg, #8e2de2, #4a00e0);
+      }
+      .btn8 {
+        background: linear-gradient(135deg, #11998e, #38ef7d);
+      }
+      .btn9 {
+        background: linear-gradient(135deg, #fc466b, #3f5efb);
+      }
+
+      /* RIPPLE */
+      .ripple {
+        position: absolute;
+        border-radius: 50%;
+        transform: scale(0);
+        animation: rippleAnim 0.6s linear;
+        background: rgba(255, 255, 255, 0.5);
+      }
+
+      @keyframes rippleAnim {
+        to {
+          transform: scale(4);
+          opacity: 0;
+        }
+      }
+
+      /* LOADING */
+      #loading {
+        position: fixed;
+        width: 100%;
+        height: 100%;
+        background: #000000aa;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 9999;
+      }
+
+      .spinner {
+        width: 50px;
+        height: 50px;
+        border: 5px solid #ffffff40;
+        border-top: 5px solid white;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+      }
+
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
       }
 
       a {
         text-decoration: none;
         color: white;
       }
-
-      .footer {
-        margin-top: 20px;
-        font-size: 12px;
-        opacity: 0.7;
-      }
     </style>
   </head>
 
   <body>
+    <!-- LOADING -->
+    <div id="loading">
+      <div class="spinner"></div>
+    </div>
+
+    <!-- DARK MODE BUTTON -->
+    <button
+      onclick="toggleTheme()"
+      class="btn btn-light position-absolute top-0 end-0 m-3"
+    >
+      🌙 / ☀
+    </button>
+
     <div class="d-flex justify-content-center align-items-center h-100">
       <div class="glass-card text-center" style="width: 600px">
         <h3 class="title">📄 Pelayanan Surat Mahasiswa</h3>
 
-        <div class="menu-grid">
+        <div class="menu-grid" style="margin-top: 30px">
           <a href="/form/aktif-kuliah"
-            ><div class="menu-card">Surat Aktif Kuliah</div></a
+            ><div class="menu-card btn1">Surat Aktif Kuliah</div></a
           >
           <a href="/form/lab-penelitian"
-            ><div class="menu-card">Surat Lab Penelitian</div></a
+            ><div class="menu-card btn2">Surat Lab Penelitian</div></a
           >
 
           <a href="/form/ethical-clearance-manusia"
-            ><div class="menu-card">Surat Ethical Clearance (Manusia)</div></a
+            ><div class="menu-card btn3">
+              Surat Ethical Clearance (Manusia)
+            </div></a
           >
           <a href="/form/ethical-clearance-hewan"
-            ><div class="menu-card">Surat Ethical Clearance (Hewan)</div></a
+            ><div class="menu-card btn4">
+              Surat Ethical Clearance (Hewan)
+            </div></a
           >
 
           <a href="/form/identifikasi-tumbuhan"
-            ><div class="menu-card">Surat Determinasi Tumbuhan</div></a
+            ><div class="menu-card btn5">Surat Determinasi Tumbuhan</div></a
           >
           <a href="/form/penyerahan-skripsi"
-            ><div class="menu-card">Surat Penyerahan Skripsi</div></a
+            ><div class="menu-card btn6">Surat Penyerahan Skripsi</div></a
           >
 
           <a href="/form/penyerahan-skripsi-luks"
-            ><div class="menu-card">Lembar Penyerahan Skripsi Edisi Lux</div></a
+            ><div class="menu-card btn7">
+              Lembar Penyerahan Skripsi Edisi Lux
+            </div></a
           >
           <a href="/form/seminar-hasil"
-            ><div class="menu-card">Seminar Hasil</div></a
+            ><div class="menu-card btn8">Seminar Hasil</div></a
           >
 
           <a href="/form/penetapan-penguji"
-            ><div class="menu-card">
-              Penetapan penguji seminar Formulir Undangan semhas penelitian
+            ><div class="menu-card btn9">
+              Penetapan penguji seminar, Formulir, Undangan semhas penelitian
             </div></a
           >
         </div>
 
-        <div class="footer">Sistem Administrasi Mahasiswa</div>
+        <div class="footer" style="margin-top: 20px">
+          Sistem Administrasi Mahasiswa
+        </div>
       </div>
     </div>
+
+    <script>
+      /* LOADING */
+      window.addEventListener("load", () => {
+        document.getElementById("loading").style.display = "none";
+      });
+
+      /* RIPPLE */
+      document.querySelectorAll(".menu-card").forEach((btn) => {
+        btn.addEventListener("click", function (e) {
+          const circle = document.createElement("span");
+          const diameter = Math.max(this.clientWidth, this.clientHeight);
+          const rect = this.getBoundingClientRect();
+
+          circle.style.width = circle.style.height = diameter + "px";
+          circle.style.left = e.clientX - rect.left - diameter / 2 + "px";
+          circle.style.top = e.clientY - rect.top - diameter / 2 + "px";
+          circle.classList.add("ripple");
+
+          this.appendChild(circle);
+
+          setTimeout(() => circle.remove(), 600);
+        });
+      });
+
+      /* DARK MODE */
+      function toggleTheme() {
+        document.body.classList.toggle("light");
+        localStorage.setItem(
+          "theme",
+          document.body.classList.contains("light") ? "light" : "dark",
+        );
+      }
+
+      /* LOAD THEME */
+      if (localStorage.getItem("theme") === "light") {
+        document.body.classList.add("light");
+      }
+    </script>
   </body>
 </html>
