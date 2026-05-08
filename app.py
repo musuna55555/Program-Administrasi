@@ -77,6 +77,8 @@ def init_db():
             sifat TEXT,
             namahewan TEXT,
             asalhewan TEXT,
+            linkkaryailmiah TEXT,
+            linkjurnal TEXT,
             created_at TEXT DEFAULT CURRENT_TIMESTAMP
         )
     ''')
@@ -170,6 +172,8 @@ def submit():
         request.form.get('sifat'),
         request.form.get('namahewan'),
         request.form.get('asalhewan'),
+        request.form.get('linkkaryailmiah'),
+        request.form.get('linkjurnal'),
         now   # ← TAMBAH INI
     )
 
@@ -182,10 +186,10 @@ def submit():
         alamatmaha, namaortu, pekerortu, alamatortu,
         judul, doping, namatumbuhan, asaltumbuhan, keperluan,
         rencanapenel, tglsidang, hari, tgl, jam,
-        doji1, doji2, doji3, wa, tempat, sifat,namahewan, asalhewan,
+        doji1, doji2, doji3, wa, tempat, sifat,namahewan, asalhewan, linkkaryailmiah, linkjurnal,
         created_at   -- ← TAMBAH INI
     )
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     """, data)
 
     conn.commit()

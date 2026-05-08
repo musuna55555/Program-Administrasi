@@ -10,9 +10,7 @@
   <body class="bg-light">
     <div class="container mt-5">
       <div class="card shadow p-4">
-        <h3 class="mb-4 text-center">
-          Form Penyerahan Skripsi
-        </h3>
+        <h3 class="mb-4 text-center">Form Penyerahan Skripsi</h3>
 
         <form action="/submit" method="POST">
           <input
@@ -34,21 +32,25 @@
 
               <label>Program Studi</label>
               <input class="form-control mb-3" name="prodi" />
-            </div>
 
-            <div class="col-md-6">
               <label>Jenjang Pendidikan</label>
               <input class="form-control mb-3" name="jp" />
 
-                <label>Dosen Pembimbing</label>
-                <input class="form-control mb-3" name="doping" />
+              <label>Dosen Pembimbing</label>
+              <input class="form-control mb-3" name="doping" />
+            </div>
+            <div class="col-md-6">
+              <label>Judul Skripsi</label>
+              <textarea class="form-control mb-3" name="judul"></textarea>
 
-                <label>Judul Skripsi</label>
-                <textarea class="form-control mb-3" name="judul"></textarea>
+              <label>Tanggal Sidang</label>
+              <input class="form-control mb-3" name="tglsidang" />
 
-                <label>Tanggal Sidang</label>
-                <input class="form-control mb-3" name="tglsidang" />
-                
+              <label>Link Karya Ilmiah</label>
+              <input class="form-control mb-3" name="linkkaryailmiah" />
+
+              <label>Link Jurnal</label>
+              <input class="form-control mb-3" name="linkjurnal" />
             </div>
           </div>
 
