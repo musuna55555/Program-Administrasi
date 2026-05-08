@@ -30,6 +30,7 @@ TEMPLATES = {
     "Permohonan Surat Ethical Clearance Manusia": os.path.join("templates_surat", "ethical(manusia).docx"),
     "Permohonan Surat Ethical Clearance Hewan": os.path.join("templates_surat", "ethical(hewan).docx"),
     "Surat Identifikasi Tumbuhan": os.path.join("templates_surat", "tumbuhan.docx"),
+    "Surat Identifikasi Hewan": os.path.join("templates_surat", "identifikasi_hewan.docx"),
     "Surat Penyerahan Skripsi": os.path.join("templates_surat", "penyerahan_skripsi.docx"),
     "Seminar hasil": os.path.join("templates_surat", "seminar_hasil.docx"),
     "Surat Penyerahan Skripsi Lux": os.path.join("templates_surat", "penyerahan_skripsi_luks.docx"),
@@ -74,6 +75,8 @@ def init_db():
             wa TEXT,
             tempat TEXT,
             sifat TEXT,
+            namahewan TEXT,
+            asalhewan TEXT,
             created_at TEXT DEFAULT CURRENT_TIMESTAMP
         )
     ''')
@@ -107,6 +110,10 @@ def form_ethical_clearance_manusia():
 @app.route('/form/ethical-clearance-hewan')
 def form_ethical_clearance_hewan():
     return render_template('form_ethical_clearance(hewan).html')
+
+@app.route('/form/identifikasi-hewan')
+def form_identifikasi_hewan():
+    return render_template('form_identifikasi_hewan.html')
 
 @app.route('/form/identifikasi-tumbuhan')
 def form_identifikasi_tumbuhan():
@@ -161,6 +168,8 @@ def submit():
         request.form.get('wa'),
         request.form.get('tempat'),
         request.form.get('sifat'),
+        request.form.get('namahewan'),
+        request.form.get('asalhewan'),
         now   # ← TAMBAH INI
     )
 
@@ -173,10 +182,10 @@ def submit():
         alamatmaha, namaortu, pekerortu, alamatortu,
         judul, doping, namatumbuhan, asaltumbuhan, keperluan,
         rencanapenel, tglsidang, hari, tgl, jam,
-        doji1, doji2, doji3, wa, tempat, sifat,
+        doji1, doji2, doji3, wa, tempat, sifat,namahewan, asalhewan,
         created_at   -- ← TAMBAH INI
     )
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     """, data)
 
     conn.commit()
@@ -320,7 +329,7 @@ def generate(id):
     doc.save(buffer)
     buffer.seek(0)
 
-    return send_file(buffer, as_attachment=True, download_name=f"surat_{id}.docx")
+    return send_file(buffer, as_attachment=True, download_name=f"{row['keperluan']} - {row['nama']}.docx")
 
 
 # ================= RUN =================
