@@ -15,7 +15,7 @@ def login():
         username = request.form.get('username')
         password = request.form.get('password')
 
-        if username == "admin" and password == "balkisut":
+        if username == "admin" and password == "barokah123":
             session['login'] = True
             return redirect('/admin')
         else:
